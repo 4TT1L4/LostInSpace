@@ -38,4 +38,8 @@ public class Node {
 		return "Node(" + id  + ")";
 	}
 
+	public Node getNode(long playerDirection) {
+		return edges.get(Long.valueOf(playerDirection));
+	}
+
 }

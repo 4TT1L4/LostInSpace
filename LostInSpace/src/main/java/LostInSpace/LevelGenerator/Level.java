@@ -11,6 +11,7 @@ public class Level implements ILevel {
 	Node entrance;
 	Node exit;
 	Set<Node> nodes = new HashSet<Node>();
+	private int directions;
 	
 	Level generateNodes(long size)
 	{
@@ -23,6 +24,8 @@ public class Level implements ILevel {
 	}
 
 	public Level createSpanningTree(long seed, int directions) {
+		this.directions = directions;
+		
 		List<Node> nodesList = new ArrayList<Node>();
 		nodesList.addAll(nodes);
 		Random rand = new Random(seed);
@@ -90,5 +93,15 @@ public class Level implements ILevel {
 		while(!marked);	
 	    
 		return this;
+	}
+
+	@Override
+	public Node getEntrance() {
+		return entrance;
+	}
+
+	@Override
+	public int getDirections() {
+		return directions;
 	}
 }
