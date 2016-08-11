@@ -7,7 +7,8 @@ public class LevelGenerator implements ILevelGenerator {
 		
 		level.generateNodes(size)
              .createSpanningTree(seed, 4)
-		     .addFurtherEdges(2, seed);
+		     .addFurtherEdges(2, seed)
+		     .markEntranceAndExit(seed);
 		
 		// generate entrance and exit
 		

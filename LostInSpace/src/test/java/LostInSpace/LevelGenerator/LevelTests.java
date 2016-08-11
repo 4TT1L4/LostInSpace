@@ -88,4 +88,29 @@ public class LevelTests {
 		return accessibleNodes;
 	}
 
+	@Test
+	public void test_generatedLevel_EntranceAndExitAreNotNull() {
+		final int testSize = 6;
+		final int testSeed = 3;
+		Level level = new Level().generateNodes(testSize)
+				                 .createSpanningTree(testSeed, 4)
+				                 .addFurtherEdges(3, testSeed)
+				                 .markEntranceAndExit(testSeed);
+
+		assertTrue(level.entrance != null);
+		assertTrue(level.exit != null);	
+	}
+
+	@Test
+	public void test_generatedLevel_EntranceAndExitAreHavingOneNeighbour() {
+		final int testSize = 6;
+		final int testSeed = 3;
+		Level level = new Level().generateNodes(testSize)
+				                 .createSpanningTree(testSeed, 4)
+				                 .addFurtherEdges(3, testSeed)
+				                 .markEntranceAndExit(testSeed);
+
+		assertTrue(level.entrance.edges.size() == 1);
+		assertTrue(level.exit.edges.size() == 1);	
+	}
 }

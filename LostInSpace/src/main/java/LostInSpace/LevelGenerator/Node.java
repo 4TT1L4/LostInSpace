@@ -6,11 +6,15 @@ import java.util.Map;
 
 public class Node {
 
-	Map<Long, Node> edges = new HashMap<Long, Node>();
+	public Map<Long, Node> edges = new HashMap<Long, Node>();
 	
 	static int nextID = 1;
 	
 	final int id;
+	
+	// DEBUG 
+	public int x;
+	public int y;
 	
 	public Node()
 	{

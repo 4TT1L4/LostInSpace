@@ -22,6 +22,20 @@ public class Level implements ILevel {
 	     
 	     return this;
 	}
+	
+	public static Level getLevel(int size, long seed)
+	{
+		return getLevel(size, seed, 4);
+	}
+	
+	public static Level getLevel(int size, long seed, int directions)
+	{
+		return new Level().generateNodes(size)
+        .createSpanningTree(seed, directions)
+        .addFurtherEdges(3, seed)
+        .markEntranceAndExit(seed);		
+	}
+	
 
 	public Level createSpanningTree(long seed, int directions) {
 		this.directions = directions;
@@ -31,17 +45,16 @@ public class Level implements ILevel {
 		Random rand = new Random(seed);
 		java.util.Collections.shuffle(nodesList, rand);
 		
-		for(int i = 0; i < nodesList.size(); i ++)
+		for(int i = 0; i < nodesList.size() - 1; i ++)
 		{
 			boolean added = false;
 			
 			do
 			{
 				int direction1 = Math.abs(rand.nextInt()) % directions;
-			    int direction2 = Math.abs(rand.nextInt()) % directions;
-			    int targetNodeIndex = Math.abs(rand.nextInt()) % nodesList.size();
+			    int direction2 = (direction1 + 2) % directions;
 			    Node currentNode = nodesList.get(i);
-			    Node targetNode = nodesList.get(targetNodeIndex);
+			    Node targetNode = nodesList.get(i + 1);
 			    
 			    if(currentNode.equals(targetNode))
 			    {
@@ -81,11 +94,27 @@ public class Level implements ILevel {
 		{
 		    int entranceIndex = Math.abs(rand.nextInt()) % nodesList.size();
 		    int exitIndex = Math.abs(rand.nextInt()) % nodesList.size();
+		    int entranceDirection = Math.abs(rand.nextInt()) % 4;
+		    int exitDirection = Math.abs(rand.nextInt()) % 4;
+
+	    	Node entrance = nodesList.get(entranceIndex);
+	    	Node exit = nodesList.get(exitIndex);
 		    
-		    if(entranceIndex != exitIndex)
+		    if(entranceIndex != exitIndex &&
+			   !entrance.isEdgePresent(entranceDirection) &&
+			   !exit.isEdgePresent(exitDirection)
+			   )
 		    {
-		    	this.entrance = nodesList.get(entranceIndex);
-		    	this.exit = nodesList.get(exitIndex);
+		    	this.entrance = new Entrance();
+		    	this.entrance.addEdge((entranceDirection + 2) % 4, entrance);
+		    	entrance.addEdge(entranceDirection, this.entrance);
+		    	this.nodes.add(this.entrance);
+		    	
+		    	this.exit = new Exit();		    	
+		    	this.exit.addEdge((exitDirection + 2) % 4, exit);
+		    	exit.addEdge(exitDirection, this.exit);
+		    	this.nodes.add(this.exit);
+		    	
 		    	marked = true;
 		    }
 		    
