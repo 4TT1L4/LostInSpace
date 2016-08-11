@@ -13,7 +13,7 @@ public class Level implements ILevel {
 	Set<Node> nodes = new HashSet<Node>();
 	private int directions;
 	
-	Level generateNodes(long size)
+	public Level generateNodes(long size)
 	{
 	     for(int i = 0; i < size * size; i++)
 	     {

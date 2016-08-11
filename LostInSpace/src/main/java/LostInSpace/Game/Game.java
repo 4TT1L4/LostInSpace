@@ -15,6 +15,11 @@ public class Game {
 	ILevel level;
 	
 	volatile Node playerNode;
+	public Node getPlayerNode()
+	{
+		return playerNode;
+	}
+	
 	int playerDirection = 0;
 	
 	/**
