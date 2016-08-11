@@ -4,18 +4,33 @@ import LostInSpace.LevelGenerator.ILevel;
 import LostInSpace.LevelGenerator.Level;
 import LostInSpace.LevelGenerator.Node;
 
+/**
+ * The game class implements the basic game logic. It makes possible to control the player in the current level through
+ * providing the possibility to execute different actions like; turning left, right or moving forward in the actual level.
+ * 
+ * @author Attila Bujáki
+ *
+ */
 public class Game {
 	ILevel level;
 	
 	volatile Node playerNode;
 	int playerDirection = 0;
 	
+	/**
+	 * Set the active level.
+	 * 
+	 * @param level The level to be used in the game.
+	 */
 	public void setLevel(Level level) {
 		this.level = level;
 		playerDirection = 0;
 		playerNode = level.getEntrance();
 	}
 	
+	/**
+	 * Turn the player left.
+	 */
 	public void turnLeft()
 	{
 		System.out.println(" turn left - old direction: " + playerDirection);
@@ -31,6 +46,11 @@ public class Game {
 		System.out.println(" turn left - new direction: " + playerDirection);
 	}
 	
+	/**
+	 * Make the player try to go forward. If it is possible, then updates the actual position node of the player.
+	 * 
+	 * @return true, if the movement was successful, otwerwise false.
+	 */
 	public boolean goForward()
 	{
 		 System.out.println(" goForward - direction: " + playerDirection);
@@ -55,7 +75,10 @@ public class Game {
 	 		 return true;
 	     }
 	}	
-	
+
+	/**
+	 * Turn the player right.
+	 */
 	public void turnRight()
 	{
 		System.out.println(" turn right - old direction: " + playerDirection);
