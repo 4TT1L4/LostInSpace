@@ -34,7 +34,7 @@ public class GamePrototype2D extends Frame implements KeyListener {
     super("GamePrototype2D");
     game = new Game();
 	game.setLevel(Level.getLevel(3, 2));	
-    setSize(800,800);
+    setSize(1600,800);
     setVisible(true);
     addKeyListener(this);
    
@@ -69,7 +69,97 @@ public class GamePrototype2D extends Frame implements KeyListener {
     
     Node firstNode = this.game.level.getEntrance();
 
-    // Collect all the nodes.
+    drawLevelGraph(g2d, firstNode);
+    drawLevelTopView(g2d, game.playerNode, game.playerDirection);
+  }
+
+private void drawLevelTopView(Graphics2D g2d, Node playerNode, int playerDirection) {
+	int x0 = 1200;
+	int y0 = 600;
+	
+	// Draw the top view of the level
+	g2d.fillRect(x0-1 , y0 - 1, 4, 4);
+	
+	drawNode(g2d, playerNode, playerDirection, x0, y0, 0, 0, 0 , 0);
+	
+}
+
+private void drawNode(Graphics2D g2d, Node node, int playerDirection, int x0, int y0, int depth, int top, int left, int right) {
+	
+	if(node == null)
+	{
+		return;
+	}
+	
+	if(depth >= 10) 
+	{
+		// Don't go deeper than 10 nodes.
+		return;
+	}
+
+	if( left > 1)
+	{
+		// Don't go more left than top
+		return;
+	}
+	
+	if( right > 1)
+	{
+		// Don't go more right than top
+		return;
+	}
+	
+	
+	
+	// 1. draw the current node. Easy.
+	// player direction is always on top.
+	int topDirection = playerDirection;
+	int rightDirection = (playerDirection + 1) % 4;
+	int bottomDirection = (playerDirection + 2) % 4;
+	int leftDirection = (playerDirection + 3) % 4;
+		
+    if(!node.isEdgePresent(topDirection)) drawTopWall(g2d, x0, y0, topDirection);
+	if(!node.isEdgePresent(rightDirection)) drawRightWall(g2d, x0, y0, rightDirection);
+	if(!node.isEdgePresent(bottomDirection)) drawBottomWall(g2d, x0, y0, bottomDirection);
+	if(!node.isEdgePresent(leftDirection)) drawLeftWall(g2d, x0, y0, leftDirection);
+
+    if(node.isEdgePresent(topDirection)) drawNode(g2d, node.getNode(topDirection), playerDirection, x0, y0 - 10, depth + 1, top +1, left, right);
+    if(node.isEdgePresent(rightDirection)) drawNode(g2d, node.getNode(rightDirection), playerDirection, x0 + 10, y0 , depth + 1, top, left, right+1);
+    if(node.isEdgePresent(leftDirection)) drawNode(g2d, node.getNode(leftDirection), playerDirection, x0 - 10, y0 , depth + 1, top, left +1, right);
+	
+}
+
+private void drawLeftWall(Graphics2D g2d, int x, int y, int debug)
+{
+    g2d.setColor(new Color(0.0f, 0.0f, 0.0f));
+	g2d.fillRect(x - 5 , y - 5, 2, 10);
+    g2d.setColor(new Color(0.0f, 1.0f, 0.0f));
+    g2d.drawString(""+ debug, x - 13, y-3);
+}
+private void drawTopWall(Graphics2D g2d, int x, int y, int debug)
+{
+    g2d.setColor(new Color(0.0f, 0.0f, 0.0f));
+	g2d.fillRect(x - 5 , y - 5, 10, 2);
+    g2d.setColor(new Color(0.0f, 1.0f, 0.0f));
+    g2d.drawString(""+ debug, x - 3, y-13);
+}
+private void drawRightWall(Graphics2D g2d, int x, int y, int debug)
+{
+    g2d.setColor(new Color(0.0f, 0.0f, 0.0f));
+	g2d.fillRect(x + 4 , y - 4, 2, 10);
+    g2d.setColor(new Color(0.0f, 1.0f, 0.0f));
+    g2d.drawString(""+ debug, x + 10, y-3);
+}
+private void drawBottomWall(Graphics2D g2d, int x, int y, int debug)
+{
+    g2d.setColor(new Color(0.0f, 0.0f, 0.0f));
+	g2d.fillRect(x - 4 , y + 4, 10, 2);
+    g2d.setColor(new Color(0.0f, 1.0f, 0.0f));
+    g2d.drawString(""+ debug, x-3, y + 10);
+}
+
+private void drawLevelGraph(Graphics2D g2d, Node firstNode) {
+	// Collect all the nodes.
     Set<Node> accessibleNodes = new HashSet<Node>();
     accessibleNodes.add(firstNode);
 	
@@ -152,7 +242,7 @@ public class GamePrototype2D extends Frame implements KeyListener {
 		    g2d.drawString("edge:" + key, textCoordX+1, textCoordY+1);
 	    }
 	}
-  }
+}
 
 /**
  * Keyboard handling for the game prototype.

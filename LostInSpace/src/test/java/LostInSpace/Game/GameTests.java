@@ -59,6 +59,10 @@ public class GameTests {
 		assertTrue(entranceCouldBeLeft);
 	}
 
+	@Test
+	public void Game_generateLevel_NoExceptionIsThrown() {
+		new Game().generateLevel(5, 5);
+	}
 
 	@Test
 	public void Game_AfterLeavingEntrance_TheNeighbourCouldBeLeft() {

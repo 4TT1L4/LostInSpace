@@ -27,10 +27,24 @@ public class Game {
 	 * 
 	 * @param level The level to be used in the game.
 	 */
-	public void setLevel(Level level) {
+	void setLevel(Level level) {
 		this.level = level;
 		playerDirection = 0;
 		playerNode = level.getEntrance();
+	}
+
+	/**
+	 * Generate a new level based on the passed seed in the given size.
+     *  
+     * @param size The size of the level. The number of the nodes is going to be the square of the passed integer.
+     * @param seed The seed to be used in the random generators.
+     */
+	public void generateLevel(int size, int seed)
+	{
+		this.level = new Level().generateNodes(size)
+                .createSpanningTree(seed, 4)
+                .addFurtherEdges(size, seed)
+                .markEntranceAndExit(seed);
 	}
 	
 	/**
