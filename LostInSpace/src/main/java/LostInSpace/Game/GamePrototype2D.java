@@ -53,7 +53,7 @@ public class GamePrototype2D extends Frame implements KeyListener {
     private Random rand = new Random(3);  
   private int getRandomCoord()
   {
-	   return rand.nextInt(750) + 25;
+	   return rand.nextInt(750) + 50;
   }
   
   
@@ -65,7 +65,7 @@ public class GamePrototype2D extends Frame implements KeyListener {
   public void paint(Graphics g) {
     Graphics2D g2d = (Graphics2D)g;
     
-    g2d.drawString("PlayerDirection:" + game.playerDirection, 10, 10);
+    g2d.drawString("PlayerDirection:" + game.playerDirection, 30, 50);
     
     Node firstNode = this.game.level.getEntrance();
 
@@ -124,6 +124,8 @@ public class GamePrototype2D extends Frame implements KeyListener {
 		
 		// Paint an oval for each node.
 	    g2d.drawOval(node.x, node.y, 10, 10);
+
+	    g2d.drawString(node.toString(), node.x, node.y -10);
 	    
 	    // Draw the edges between the nodes.
 	    for(Long key : node.edges.keySet())
@@ -142,7 +144,12 @@ public class GamePrototype2D extends Frame implements KeyListener {
     	    }
 	    	
 	    	// Draw the current edge.
-		    g2d.drawLine(node.x+5, node.y+5, neighbour.x+5, neighbour.y+5);	    	
+		    g2d.drawLine(node.x+5, node.y+5, neighbour.x+5, neighbour.y+5);
+		    
+		    // Print the direction of the edge.
+		    int textCoordX = (((node.x+5) * 5) + (neighbour.x+5))/6;
+		    int textCoordY = (((node.y+5) * 5) + (neighbour.y+5))/6;
+		    g2d.drawString("edge:" + key, textCoordX+1, textCoordY+1);
 	    }
 	}
   }
