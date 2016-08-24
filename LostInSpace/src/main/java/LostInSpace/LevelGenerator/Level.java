@@ -6,12 +6,15 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 
+import LostInSpace.Game.LevelEvent;
+
 public class Level implements ILevel {
 	
 	Node entrance;
-	Node exit;
+	Exit exit;
 	Set<Node> nodes = new HashSet<Node>();
 	private int directions;
+	private LevelEvent eventHandler;
 	
 	public Level generateNodes(long size)
 	{
@@ -24,7 +27,7 @@ public class Level implements ILevel {
 	}
 	
 	public static Level getLevel(int size, long seed)
-	{
+	{		
 		return getLevel(size, seed, 4);
 	}
 	
@@ -110,7 +113,7 @@ public class Level implements ILevel {
 		    	entrance.addEdge(entranceDirection, this.entrance);
 		    	this.nodes.add(this.entrance);
 		    	
-		    	this.exit = new Exit();		    	
+		    	this.exit = new Exit();
 		    	this.exit.addEdge((exitDirection + 2) % 4, exit);
 		    	exit.addEdge(exitDirection, this.exit);
 		    	this.nodes.add(this.exit);
@@ -132,5 +135,11 @@ public class Level implements ILevel {
 	@Override
 	public int getDirections() {
 		return directions;
+	}
+
+	public Level setEventHandler(LevelEvent eventHandler) {
+		this.eventHandler = eventHandler;
+		this.exit.setEventHandler(this.eventHandler);
+		return this;
 	}
 }

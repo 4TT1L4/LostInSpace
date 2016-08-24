@@ -26,6 +26,11 @@ public class Node {
 		id = nextID;
 		nextID++;		
 	}
+	
+	public void NodeEntered()
+	{
+		System.out.println("NodeEntered(" + this.toString() + ")");
+	}
 		
 	public boolean isEdgePresent(long direction)
 	{

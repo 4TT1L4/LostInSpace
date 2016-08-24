@@ -1,5 +1,8 @@
 package LostInSpace.Game;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import LostInSpace.LevelGenerator.ILevel;
 import LostInSpace.LevelGenerator.Level;
 import LostInSpace.LevelGenerator.Node;
@@ -11,8 +14,10 @@ import LostInSpace.LevelGenerator.Node;
  * @author Attila Bujáki
  *
  */
-public class Game {
+public class Game implements LevelEvent {
 	ILevel level;
+	
+	List<LevelEvent> levelEventListeners = new ArrayList<LevelEvent>();
 	
 	volatile Node playerNode;
 	public Node getPlayerNode()
@@ -28,6 +33,7 @@ public class Game {
 	 * @param level The level to be used in the game.
 	 */
 	void setLevel(Level level) {
+		level.setEventHandler(this);
 		this.level = level;
 		playerDirection = 0;
 		playerNode = level.getEntrance();
@@ -41,10 +47,12 @@ public class Game {
      */
 	public void generateLevel(int size, int seed)
 	{
-		this.level = new Level().generateNodes(size)
-                .createSpanningTree(seed, 4)
-                .addFurtherEdges(size, seed)
-                .markEntranceAndExit(seed);
+		this.level = new Level()
+				                .setEventHandler(this)
+				                .generateNodes(size)
+                                .createSpanningTree(seed, 4)
+                                .addFurtherEdges(size, seed)
+                                .markEntranceAndExit(seed);
 	}
 	
 	/**
@@ -86,6 +94,7 @@ public class Game {
 	     {
 			 System.out.println(" goForward - edge found. direction: " + playerDirection + "moving to:" + this.playerNode.getNode(playerDirection));	
 	    	 playerNode = this.playerNode.getNode(playerDirection);
+	    	 playerNode.NodeEntered();
 
 			 for(Long key : this.playerNode.edges.keySet())
 			 {
@@ -111,6 +120,28 @@ public class Game {
 			playerDirection++;
 		}
 		System.out.println(" turn right - new direction: " + playerDirection);
+	}
+
+    public void AddLevelEventListener(LevelEvent eventListener)
+    {
+    	this.levelEventListeners.add(eventListener);
+    }
+	
+	@Override
+	public void ExitEntered() {
+	  	System.out.println("[Game.ExitEntered]");
+		for(LevelEvent levelEventListener : levelEventListeners)
+		{
+		    try
+		    {
+			  	System.out.println("Notify ExitEntered to event handler: " + levelEventListener);
+		    	levelEventListener.ExitEntered();
+		    }
+		    catch (Exception exception)
+		    {
+		    	System.err.println("Exception in ExitEntered event handler: " + levelEventListener + " Exception:" + exception);
+		    }
+		}		
 	}
 	
 }
