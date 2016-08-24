@@ -88,22 +88,6 @@ public class GamePrototype2D extends Frame implements KeyListener, LevelEvent {
 		if (node == null) {
 			return;
 		}
-
-		if (depth >= 10) {
-			// Don't go deeper than 10 nodes.
-			return;
-		}
-
-		if (left > 1) {
-			// Don't go more left than top
-			return;
-		}
-
-		if (right > 1) {
-			// Don't go more right than top
-			return;
-		}
-
 		// 1. draw the current node. Easy.
 		// player direction is always on top.
 		int topDirection = playerDirection;
@@ -120,12 +104,35 @@ public class GamePrototype2D extends Frame implements KeyListener, LevelEvent {
 		if (!node.isEdgePresent(leftDirection))
 			drawLeftWall(g2d, x0, y0, leftDirection);
 
+
+		if (depth >= 10) {
+			// Don't go deeper than 10 nodes.
+			return;
+		}
+
+		if ((left > top )) {
+			// Don't go more left than top
+			return;
+		}
+
+		if ( (right > top )) {
+			// Don't go more right than top
+			return;
+		}
+		
 		if (node.isEdgePresent(topDirection))
 			drawNode(g2d, node.getNode(topDirection), playerDirection, x0, y0 - 10, depth + 1, top + 1, left, right);
-		if (node.isEdgePresent(rightDirection))
-			drawNode(g2d, node.getNode(rightDirection), playerDirection, x0 + 10, y0, depth + 1, top, left, right + 1);
+		if (left == 0)
+		{
+		    if (node.isEdgePresent(rightDirection))
+			    drawNode(g2d, node.getNode(rightDirection), playerDirection, x0 + 10, y0, depth + 1, top, left, right + 1);
+		}
+
+		if (right == 0)
+		{
 		if (node.isEdgePresent(leftDirection))
 			drawNode(g2d, node.getNode(leftDirection), playerDirection, x0 - 10, y0, depth + 1, top, left + 1, right);
+		}
 
 	}
 
