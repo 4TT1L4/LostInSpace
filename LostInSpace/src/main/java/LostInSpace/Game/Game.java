@@ -48,11 +48,11 @@ public class Game implements LevelEvent {
 	public void generateLevel(int size, int seed)
 	{
 		this.level = new Level()
-				                .setEventHandler(this)
 				                .generateNodes(size)
                                 .createSpanningTree(seed, 4)
                                 .addFurtherEdges(size, seed)
-                                .markEntranceAndExit(seed);
+                                .markEntranceAndExit(seed)
+				                .setEventHandler(this);
 	}
 	
 	/**
